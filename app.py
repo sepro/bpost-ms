@@ -130,7 +130,8 @@ def parse_bpost_validation(response):
     errors = 0
     warnings = 0
     output = {
-        'status': 'validated'
+        'status': 'validated',
+        'fields': {}
     }
 
     response_errors = list(find("Error", response))
@@ -138,8 +139,6 @@ def parse_bpost_validation(response):
     # If 0 < length of list, there are errors which need to be handled
     if 0 < len(response_errors):
         for response_error in response_errors[0]:
-            print(response_error)
-
             if isinstance(response_error, dict) and 'ErrorSeverity' in response_error.keys():
                 if response_error['ErrorSeverity'] == 'warning':
                     warnings += 1
@@ -149,7 +148,11 @@ def parse_bpost_validation(response):
             if isinstance(response_error, dict) and 'ComponentRef' in response_error.keys():
                 if response_error['ComponentRef'] != '':
                     component = find(response_error['ComponentRef'], response)
-                    print(response_error['ComponentRef'], list(component))
+
+                    output['fields'][response_error['ComponentRef']] = {
+                        'valid': False,
+                        'suggestion': ','.join(list(component))
+                    }
 
     if 0 < errors:
         output['result'] = 'error'
