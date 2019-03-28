@@ -4,6 +4,8 @@ import json
 import requests
 from jsonschema import validate, ValidationError
 
+from utils import find
+
 app = Flask(__name__)
 
 address_schema = {
@@ -125,9 +127,18 @@ def parse_bpost_validation(response):
     :param response: Dictionary from BPost validation
     :return: Simplified dictionary
     """
+    output = {}
 
-    if "ValidateAddressesResponse" in response.keys():
-        pass
+    errors = list(find("Error", response))
+
+    if len(errors) > 0:
+        # One or more errors were detected, handle them
+        for error in errors[0]:
+            print(error)
+            if isinstance(error, dict) and 'ComponentRef' in error.keys():
+                if error['ComponentRef'] != '':
+                    component = find(error['ComponentRef'], response)
+                    print(error['ComponentRef'], list(component))
 
     return response
 
