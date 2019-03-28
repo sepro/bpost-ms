@@ -127,20 +127,38 @@ def parse_bpost_validation(response):
     :param response: Dictionary from BPost validation
     :return: Simplified dictionary
     """
-    output = {}
+    errors = 0
+    warnings = 0
+    output = {
+        'status': 'validated'
+    }
 
-    errors = list(find("Error", response))
+    response_errors = list(find("Error", response))
 
-    if len(errors) > 0:
-        # One or more errors were detected, handle them
-        for error in errors[0]:
-            print(error)
-            if isinstance(error, dict) and 'ComponentRef' in error.keys():
-                if error['ComponentRef'] != '':
-                    component = find(error['ComponentRef'], response)
-                    print(error['ComponentRef'], list(component))
+    # If 0 < length of list, there are errors which need to be handled
+    if 0 < len(response_errors):
+        for response_error in response_errors[0]:
+            print(response_error)
 
-    return response
+            if isinstance(response_error, dict) and 'ErrorSeverity' in response_error.keys():
+                if response_error['ErrorSeverity'] == 'warning':
+                    warnings += 1
+                elif response_error['ErrorSeverity'] == 'error':
+                    errors += 1
+
+            if isinstance(response_error, dict) and 'ComponentRef' in response_error.keys():
+                if response_error['ComponentRef'] != '':
+                    component = find(response_error['ComponentRef'], response)
+                    print(response_error['ComponentRef'], list(component))
+
+    if 0 < errors:
+        output['result'] = 'error'
+    elif 0 < warnings:
+        output['result'] = 'warning'
+    else:
+        output['result'] = 'valid'
+
+    return {'ori': response, 'simple': output}
 
 
 @app.route('/validate', methods=['POST'])
