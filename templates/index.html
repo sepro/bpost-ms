@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <title>BPost-WS Example</title>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+        <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+        <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="container">
+                <h1>BPost-WS Example</h1>
+                <form>
+                    <fieldset>
+                        <div class="row">
+                            <div class="column column-20">
+                                <label for="titleField">Title</label>
+                                <select id="titleField">
+                                  <option value="Mr">Mr</option>
+                                  <option value="Ms">Ms</option>
+                                  <option value="Dr">Dr</option>
+                                </select>
+                            </div>
+                            <div class="column column-40">
+                                <label for="firstNameField">First Name</label>
+                                <input type="text" value="Charles" id="firstNameField">
+                            </div>
+                            <div class="column column-40">
+                                <label for="lastNameField">Last Name</label>
+                                <input type="text" value="Michel" id="lastNameField">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="column column-60">
+                                <label for="streetNameField">Street</label>
+                                <input type="text" value="Wetstraat" id="streetNameField">
+                            </div>
+                            <div class="column column-20">
+                                <label for="streetNumberField">Number</label>
+                                <input type="text" value="16" id="streetNumberField">
+                            </div>
+                            <div class="column column-20">
+                                <label for="boxNumberField">Box</label>
+                                <input type="text" value="" id="boxNumberField">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="column column-40">
+                                <label for="postalCodeField">Postal code</label>
+                                <input type="text" value="1000" id="postalCodeField">
+                            </div>
+                            <div class="column column-60">
+                                <label for="cityField">City</label>
+                                <input type="text" value="Brussel" id="cityField">
+                            </div>
+                        </div>
+                        <label for="countryField">Country</label>
+                        <input type="text" value="België" id="countryField">
+                      <input class="button-primary" type="submit" id="validation_button" value="Validate">
+                    </fieldset>
+                </form>
+                <h2>Request</h2>
+                <pre>
+                    <code id="request"></code>
+                </pre>
+                <h2>Response</h2>
+                <pre>
+                    <code id="response"></code>
+                </pre>
+            </div>
+        </div>
+        <script>
+        $(function() {
+
+            $("#validation_button").click(function(ev) {
+                ev.preventDefault();
+
+                let payload = {
+                    'Title': $("#titleField").val(),
+                    'FirstName': $("#firstNameField").val(),
+                    'LastName': $("#lastNameField").val(),
+
+                    'StreetName': $("#streetNameField").val(),
+                    'StreetNumber': $("#streetNumberField").val(),
+                    'BoxNumber': $("#boxNumberField").val(),
+                    'PostalCode': $("#postalCodeField").val(),
+                    'MunicipalityName': $("#cityField").val(),
+                    'Country': $("#countryField").val()
+                }
+
+                $('#request').text(JSON.stringify(payload, null, '\t'));
+
+                $.ajax({
+                    type: "POST",
+                    url: '{{ url_for('validate_address') }}',
+                    contentType: 'application/json;charset=UTF-8',
+                    data : JSON.stringify(payload, null, '\t'),
+                    success: function(data) {
+                        $('#response').text(JSON.stringify(data, null, '\t'));
+                    }
+                });
+            });
+        });
+        </script>
+    </body>
+</html>
