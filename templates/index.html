@@ -59,7 +59,7 @@
                         </div>
                         <label for="countryField">Country</label>
                         <input type="text" value="Belgie" id="countryField">
-                      <input class="button-primary" type="submit" id="validation_button" value="Validate">
+                      <input class="button-primary float-right" type="submit" id="validation_button" value="Validate">
                     </fieldset>
                 </form>
                 <h2>Request</h2>
@@ -98,6 +98,7 @@
                     url: '{{ url_for('validate_address') }}',
                     contentType: 'application/json;charset=UTF-8',
                     data : JSON.stringify(payload, null, '\t'),
+                    timeout: 3000,
                     success: function(data) {
                         $('#response').text(JSON.stringify(data, null, '\t'));
 

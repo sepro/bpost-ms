@@ -44,7 +44,7 @@ address_schema = {
 
 
 def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", MunicipalityName="", BoxNumber="", CountryName="",
-                      Title="", FirstName="", LastName="",
+                      Title="", FirstName="", LastName="", timeout=3000,
                       **kwargs):
     """
     Takes parts from a standard (Belgian) address, validates using the BPost Webservice and returns the full response
@@ -59,6 +59,7 @@ def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", Municipalit
     :param Title: Designation of the addressee (string)
     :param FirstName: First name of the addressee (string)
     :param LastName: Last name of the addressee (string)
+    :param timeout: number of milliseconds before the request times out
 
     :param kwargs: catch remaining kwargs (to avoid keyword argument error in case more details are provided)
     :return: dict with validation for each keyword
@@ -116,7 +117,7 @@ def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", Municipalit
         }
     }
 
-    r = requests.post(url, data=json.dumps(payload))
+    r = requests.post(url, data=json.dumps(payload), timeout=timeout/1000)
 
     return r.json()
 
