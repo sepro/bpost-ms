@@ -26,7 +26,7 @@ printing on labels). This are in the "submitted" and "validated" fields respecti
 
 ### Example with valid input
 
-Example payload to submit (note the typo in *Wetstraat*)
+Example payload to submit
 ```json
 {
 	"Title": "Mr",
