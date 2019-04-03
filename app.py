@@ -151,11 +151,11 @@ def parse_bpost_validation(payload, response):
 
             if isinstance(response_error, dict) and 'ComponentRef' in response_error.keys():
                 if response_error['ComponentRef'] != '':
-                    component = find(response_error['ComponentRef'], response)
+                    component = list(find(response_error['ComponentRef'], response))
 
                     output['fields'][response_error['ComponentRef']] = {
                         'valid': False,
-                        'suggestion': string.capwords(', '.join(list(component)))
+                        'suggestion': string.capwords(component[0]) if 0 < len(component) else ""
                     }
 
     # Add fields without a specific error to output
