@@ -32,7 +32,7 @@ address_schema = {
                 {"type": "number"}
             ]},
         "MunicipalityName": {"type": "string"},
-        "Country": {"type": "string"},
+        "CountryName": {"type": "string"},
     },
     "required": [
         "StreetName",
@@ -43,7 +43,7 @@ address_schema = {
 }
 
 
-def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", MunicipalityName="", BoxNumber="", Country="",
+def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", MunicipalityName="", BoxNumber="", CountryName="",
                       Title="", FirstName="", LastName="",
                       **kwargs):
     """
@@ -95,7 +95,7 @@ def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", Municipalit
                                     "MunicipalityName": MunicipalityName
                                 }
                             },
-                            "CountryName": Country
+                            "CountryName": CountryName
                         },
                         "DispatchingCountryISOCode": "BE",
                         "DeliveringCountryISOCode": "BE"
@@ -184,7 +184,8 @@ def parse_bpost_validation(payload, response):
     else:
         output['result'] = 'valid'
 
-    # return {'ori': response, 'simple': output}
+    output['full'] = response
+
     return output
 
 

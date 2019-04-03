@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <label for="countryField">Country</label>
-                        <input type="text" value="België" id="countryField">
+                        <input type="text" value="Belgie" id="countryField">
                       <input class="button-primary" type="submit" id="validation_button" value="Validate">
                     </fieldset>
                 </form>
@@ -88,7 +88,7 @@
                     'BoxNumber': $("#boxNumberField").val(),
                     'PostalCode': $("#postalCodeField").val(),
                     'MunicipalityName': $("#cityField").val(),
-                    'Country': $("#countryField").val()
+                    'CountryName': $("#countryField").val()
                 }
 
                 $('#request').text(JSON.stringify(payload, null, '\t'));
@@ -131,7 +131,7 @@
                             $("#cityField").addClass('error');
                         }
 
-                        if (data['fields']['Country']['valid']) {
+                        if (data['fields']['CountryName']['valid']) {
                             $("#countryField").removeClass('error');
                         } else {
                             $("#countryField").addClass('error');
