@@ -55,7 +55,7 @@ def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", Municipalit
     :param BoxNumber: Designation of the box/apartment (string or int)
     :param PostalCode: Postal code of the municipality (string or int)
     :param MunicipalityName: Name of the municipality (string)
-    :param Country: Name of the country (string)
+    :param CountryName: Name of the country (string)
     :param Title: Designation of the addressee (string)
     :param FirstName: First name of the addressee (string)
     :param LastName: Last name of the addressee (string)
