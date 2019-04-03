@@ -2,6 +2,7 @@ from flask import Flask, request, Response, render_template
 
 import json
 import requests
+import string
 from jsonschema import validate, ValidationError
 
 from utils import find
@@ -120,10 +121,11 @@ def validate_on_bpost(StreetName="", StreetNumber="", PostalCode="", Municipalit
     return r.json()
 
 
-def parse_bpost_validation(response):
+def parse_bpost_validation(payload, response):
     """
     Parses the response (as dict) from the BPost webservice
 
+    :param payload: Dictionary with address send to this service
     :param response: Dictionary from BPost validation
     :return: Simplified dictionary
     """
@@ -151,8 +153,29 @@ def parse_bpost_validation(response):
 
                     output['fields'][response_error['ComponentRef']] = {
                         'valid': False,
-                        'suggestion': ','.join(list(component))
+                        'suggestion': string.capwords(', '.join(list(component)))
                     }
+
+    # Add fields without a specific error to output
+    # Some fields that are considered valid, are still different from the suggestion (!) this code will
+    # include these as well.
+    for field in payload.keys():
+        if field not in output['fields'].keys():
+
+            validated_field = ''.join(list(find(field, response)))
+
+            if 0 < len(validated_field) and str(payload[field]).strip().lower() != str(validated_field).strip().lower():
+                output['fields'][field] = {
+                    'valid': False,
+                    'suggestion': string.capwords(validated_field)
+                }
+
+                warnings += 1
+            else:
+                output['fields'][field] = {
+                    'valid': True,
+                    'suggestion': payload[field]
+                }
 
     if 0 < errors:
         output['result'] = 'error'
@@ -161,7 +184,8 @@ def parse_bpost_validation(response):
     else:
         output['result'] = 'valid'
 
-    return {'ori': response, 'simple': output}
+    # return {'ori': response, 'simple': output}
+    return output
 
 
 @app.route('/validate', methods=['POST'])
@@ -197,7 +221,7 @@ def validate_address():
 
         return Response(json.dumps(exception), mimetype='application/json', status=503)
 
-    output = parse_bpost_validation(bpost_validation)
+    output = parse_bpost_validation(data, bpost_validation)
 
     return Response(json.dumps(output), mimetype='application/json')
 

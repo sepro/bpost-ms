@@ -4,3 +4,8 @@
     position: relative;
     width: 100%;
 }
+
+.error {
+    border: 0.1rem solid #ca1f1f !important;
+    background-color: #ff9999 !important;
+}

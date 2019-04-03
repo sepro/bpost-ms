@@ -100,6 +100,43 @@
                     data : JSON.stringify(payload, null, '\t'),
                     success: function(data) {
                         $('#response').text(JSON.stringify(data, null, '\t'));
+
+                        if (data['fields']['StreetName']['valid']) {
+                            $("#streetNameField").removeClass('error');
+                        } else {
+                            $("#streetNameField").addClass('error');
+                        }
+
+                        if (data['fields']['StreetNumber']['valid']) {
+                            $("#streetNumberField").removeClass('error');
+                        } else {
+                            $("#streetNumberField").addClass('error');
+                        }
+
+                        if (data['fields']['BoxNumber']['valid']) {
+                            $("#boxNumberField").removeClass('error');
+                        } else {
+                            $("#boxNumberField").addClass('error');
+                        }
+
+                        if (data['fields']['PostalCode']['valid']) {
+                            $("#postalCodeField").removeClass('error');
+                        } else {
+                            $("#postalCodeField").addClass('error');
+                        }
+
+                        if (data['fields']['MunicipalityName']['valid']) {
+                            $("#cityField").removeClass('error');
+                        } else {
+                            $("#cityField").addClass('error');
+                        }
+
+                        if (data['fields']['Country']['valid']) {
+                            $("#countryField").removeClass('error');
+                        } else {
+                            $("#countryField").addClass('error');
+                        }
+
                     }
                 });
             });
