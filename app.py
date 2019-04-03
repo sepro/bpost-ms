@@ -133,7 +133,8 @@ def parse_bpost_validation(payload, response):
     warnings = 0
     output = {
         'status': 'validated',
-        'fields': {}
+        'fields': {},
+        'formatted': {}
     }
 
     response_errors = list(find("Error", response))
@@ -184,7 +185,28 @@ def parse_bpost_validation(payload, response):
     else:
         output['result'] = 'valid'
 
-    output['full'] = response
+    output['counts'] = {
+        'errors': errors,
+        'warnings': warnings
+    }
+
+    # Add formatted address to output
+    formatted_submitted_address = list(find("FormattedSubmittedAddress", response))
+    formatted_validated_address = list(find("Label", response))
+
+    if 0 < len(formatted_submitted_address):
+        if "Line" in formatted_submitted_address[0].keys():
+            output['formatted']["submitted"] = formatted_submitted_address[0]["Line"]
+        else:
+            output['formatted']["submitted"] = []
+
+    if 0 < len(formatted_validated_address):
+        if "Line" in formatted_validated_address[0].keys():
+            output['formatted']["validated"] = formatted_validated_address[0]["Line"]
+        else:
+            output['formatted']["validated"] = []
+
+    # output['full'] = response
 
     return output
 
