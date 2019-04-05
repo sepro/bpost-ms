@@ -139,7 +139,13 @@
                             $("#countryField").addClass('error');
                         }
 
-                    }
+                    },
+                    statusCode: {
+                        503: function(data) {
+                          console.log(data);
+                          alert("Could not validate data on remote server.");
+                        }
+                      }
                 });
             });
         });
