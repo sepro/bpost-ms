@@ -1,4 +1,5 @@
 from flask import Flask, request, Response, render_template
+from flask_cors import CORS
 
 import json
 import requests
@@ -8,6 +9,7 @@ from jsonschema import validate, ValidationError
 from utils import find
 
 app = Flask(__name__)
+CORS(app)
 
 address_schema = {
     "type": "object",
