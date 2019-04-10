@@ -9,3 +9,8 @@
     border: 0.1rem solid #ca1f1f !important;
     background-color: #ff9999 !important;
 }
+
+.valid {
+    border: 0.1rem solid #1fca1f !important;
+    background-color: #99ff99 !important;
+}
