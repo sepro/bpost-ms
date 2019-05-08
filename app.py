@@ -47,14 +47,13 @@ def text_to_id(text):
 def read_zip_codes(filename):
     output = {}
 
-    with open(filename, mode='r') as infile:
+    with open(filename, mode='r', encoding='cp1252') as infile:
         reader = csv.reader(infile, delimiter=";")
 
         _ = next(reader, None)  # skip the header
 
         for row in reader:
             try:
-                print(int(row[0]), text_to_id(row[1]), row[3])
                 output[int(row[0])] = {
                     text_to_id(row[1]): row[3]
                 }
