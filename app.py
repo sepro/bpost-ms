@@ -1,12 +1,69 @@
+import csv
+import json
+import re
+import string
+import unicodedata
+
+import requests
 from flask import Flask, request, Response, render_template
 from flask_cors import CORS
-
-import json
-import requests
-import string
 from jsonschema import validate, ValidationError
 
 from utils import find
+
+
+def strip_accents(text):
+    """
+    Strip accents from input String.
+
+    :param text: The input string.
+    :type text: String.
+
+    :returns: The processed String.
+    :rtype: String.
+    """
+    text = unicodedata.normalize('NFD', text)
+    text = text.encode('ascii', 'ignore')
+    text = text.decode("utf-8")
+    return str(text)
+
+
+def text_to_id(text):
+    """
+    Convert input text to id.
+
+    :param text: The input string.
+    :type text: String.
+
+    :returns: The processed String.
+    :rtype: String.
+    """
+    text = strip_accents(text.lower())
+    text = re.sub('[ ]+', '', text)
+    text = re.sub('[^0-9a-zA-Z_]', '', text)
+    return text
+
+
+def read_zip_codes(filename):
+    output = {}
+
+    with open(filename, mode='r') as infile:
+        reader = csv.reader(infile, delimiter=";")
+
+        _ = next(reader, None)  # skip the header
+
+        for row in reader:
+            try:
+                print(int(row[0]), text_to_id(row[1]), row[3])
+                output[int(row[0])] = {
+                    text_to_id(row[1]): row[3]
+                }
+            except Exception as _:
+                # skip if there is an error on the row
+                pass
+
+    return output
+
 
 app = Flask(__name__)
 CORS(app)
@@ -26,6 +83,7 @@ address_schema = {
     },
     "required": ["StreetName", "StreetNumber", "PostalCode", "MunicipalityName"],
 }
+zipcodes = read_zip_codes('./data/zipcodes_alpha_nl.csv')
 
 
 def validate_on_bpost(
@@ -216,6 +274,14 @@ def validate_address():
     :return:
     """
     data = request.get_json()
+
+    # Try to replace 'deelgemeente' with 'gemeente'
+    try:
+        municipality = zipcodes[int(data["PostalCode"])][text_to_id(data["MunicipalityName"])]
+        data["MunicipalityName"] = municipality
+    except Exception as _:
+        # If this fails it couldn't convert a 'deelgemeente' to 'gemeente', just skip
+        pass
 
     try:
         validate(instance=data, schema=address_schema)

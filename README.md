@@ -21,12 +21,20 @@ field.
 Finally, in "formatted" the provided and validated addresses are stored, formatted by the BPost API (e.g. for 
 printing on labels). This are in the "submitted" and "validated" fields respectively.
 
+## Integration in your website
 
-## Various examples
+This webservice comes with a demo site where jQuery is used to read a form, validate the input and respond in different
+ways. More details how to use jQuery to integrate this service with other projects can be found 
+[here](./docs/jquery.md).
+
+## Examples
+
+There are a few different scenarios (valid, warning, error) that can occur, examples of each case can be found 
+[here](./docs/examples.md). Below there is an example with a valid address as input provided. 
 
 ### Example with valid input
 
-Example payload to submit
+Example **payload** to submit
 ```json
 {
 	"Title": "Mr",
@@ -41,7 +49,7 @@ Example payload to submit
 }
 ```
 
-The response will contain for each field a key if it is valid or not and a suggestion.
+The **response** will contain for each field a key if it is valid or not and a suggestion.
 
 Example output
 ```json
@@ -105,165 +113,8 @@ Example output
 }
 ```
 
-### Example with a small error
 
-Example payload to submit (note the typo in *Wetstraat*)
-```json
-{
-	"Title": "Mr",
-	"FirstName": "John",
-	"LastName": "Doe",
-	"StreetName": "Wetqstraat",
-	"StreetNumber": "16",
-	"BoxNumber": "",
-	"PostalCode": "1000",
-	"MunicipalityName": "Brussel",
-	"CountryName": "Belgie"
-}
-```
+## Data Source
 
-The response will contain for each field a key if it is valid or not and a suggestion.
-
-Example output
-```json
-{
-	"status": "validated",
-	"fields": {
-		"StreetName": {
-			"valid": false,
-			"suggestion": "Wetstraat"
-		},
-		"Title": {
-			"valid": true,
-			"suggestion": "Mr"
-		},
-		"FirstName": {
-			"valid": true,
-			"suggestion": "John"
-		},
-		"LastName": {
-			"valid": true,
-			"suggestion": "Doe"
-		},
-		"StreetNumber": {
-			"valid": true,
-			"suggestion": "16"
-		},
-		"BoxNumber": {
-			"valid": true,
-			"suggestion": ""
-		},
-		"PostalCode": {
-			"valid": true,
-			"suggestion": "1000"
-		},
-		"MunicipalityName": {
-			"valid": true,
-			"suggestion": "Brussel"
-		},
-		"CountryName": {
-			"valid": true,
-			"suggestion": "Belgie"
-		}
-	},
-	"formatted": {
-		"submitted": [
-			"Mr John Doe",
-			"Wetqstraat 16",
-			"1000 Brussel"
-		],
-		"validated": [
-			"Mr John Doe",
-			"WETSTRAAT 16",
-			"1000 BRUSSEL"
-		]
-	},
-	"result": "warning",
-	"counts": {
-		"errors": 0,
-		"warnings": 1
-	}
-}
-```
-
-### Example with many mistakes
-Here the address contains so many mistakes it can no longer be validated.
-
-Example payload to submit
-```json
-{
-	"Title": "Mr",
-	"FirstName": "John",
-	"LastName": "Doe",
-	"StreetName": "Wetstraat",
-	"StreetNumber": "16000",
-	"BoxNumber": "",
-	"PostalCode": "2000",
-	"MunicipalityName": "Hasselt",
-	"CountryName": "Belgie"
-}
-```
-
-The response will contain for each field a key if it is valid or not and a suggestion.
-
-Example output
-```json
-{
-	"status": "validated",
-	"fields": {
-		"StreetNumber": {
-			"valid": false,
-			"suggestion": ""
-		},
-		"StreetName": {
-			"valid": false,
-			"suggestion": "Rietstraat"
-		},
-		"Title": {
-			"valid": true,
-			"suggestion": "Mr"
-		},
-		"FirstName": {
-			"valid": true,
-			"suggestion": "John"
-		},
-		"LastName": {
-			"valid": true,
-			"suggestion": "Doe"
-		},
-		"BoxNumber": {
-			"valid": true,
-			"suggestion": ""
-		},
-		"PostalCode": {
-			"valid": false,
-			"suggestion": "3500"
-		},
-		"MunicipalityName": {
-			"valid": true,
-			"suggestion": "Hasselt"
-		},
-		"CountryName": {
-			"valid": true,
-			"suggestion": "Belgie"
-		}
-	},
-	"formatted": {
-		"submitted": [
-			"Mr John Doe",
-			"Wetstraat 16000",
-			"2000 Hasselt"
-		],
-		"validated": [
-			"Mr John Doe",
-			"RIETSTRAAT",
-			"3500 HASSELT"
-		]
-	},
-	"result": "error",
-	"counts": {
-		"errors": 1,
-		"warnings": 3
-	}
-}
-```
+The list of zip codes is available [here](https://www.bpost.be/site/nl/verzenden/adressering/zoek-een-postcode) on the 
+BPost. Requests send to this service are formatted correctly and passed through to the BPost address validation service. 
