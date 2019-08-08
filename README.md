@@ -12,10 +12,10 @@ A simple POST request, structured as indicated below, needs to be submitted to t
 be forwarded to the bpost validation server and the response parsed.
 
 The response, a dictionary, will contain a "status" key, which can be "validated" or "error". In case the status is
-validated the request was successfully forwarded to the BPost API and a response obtained, if this is error no 
+"validated" the request was successfully forwarded to the BPost API and a response obtained, if this is "error" no 
 validation was done due to an error.
 
-In the "fields", for each component there is a key "valid" set to True or False, if the field is considered valid or
+In the "fields", for each part of the address there is a key "valid" set to True or False, if the field is considered valid or
 not and a "suggestion", which the BPost API thinks is the correct value.
 
 The "result" can be "valid", in which case the provided address exists and is formatted correct. If this is 
