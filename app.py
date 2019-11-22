@@ -259,6 +259,10 @@ def parse_bpost_validation(payload, response):
         else:
             output["formatted"]["validated"] = []
 
+    gps_data = list(find('GeographicalLocation', response))
+
+    output['GeographicalLocation'] = gps_data[0] if len(gps_data) > 0 else {}
+
     # output['full'] = response
 
     return output
