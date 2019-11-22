@@ -1,16 +1,21 @@
 # BPost Microservice
-Flask based microservice to quickly validate Belgian addresses. An easy request if forwarded to the bpost.be API and met with a simplified response.
+Flask based microservice to quickly validate Belgian addresses. An easy request send to this webservice, is converted and 
+forwarded to the official [bpost.be API](https://www.bpost.be/site/en/webservice-address) and met with a simplified response. 
+
+As the official bpost webservice doesn't allow cross-origin resource sharing (CORS) it isn't possible to directly integrate 
+the offical webservice with web-applications. This microservice was designed as a workaround for this limitation to 
+validate addresses of new participants during the registration procedure  for the [Flemish Gut Flora Project](http://www.vlaamsdarmfloraproject.be).
 
 ## In a nutshell
 
-A simple post request, structured as indicated below, needs to be submitted to the /validate endpoint. This address will
+A simple POST request, structured as indicated below, needs to be submitted to the **/validate** endpoint. This address will
 be forwarded to the bpost validation server and the response parsed.
 
 The response, a dictionary, will contain a "status" key, which can be "validated" or "error". In case the status is
-validated the request was successfully forwarded to the BPost API and a response obtained, if this is error no 
+"validated" the request was successfully forwarded to the BPost API and a response obtained, if this is "error" no 
 validation was done due to an error.
 
-In the "fields", for each component there is a key "valid" set to True or False, if the field is considered valid or
+In the "fields", for each part of the address there is a key "valid" set to True or False, if the field is considered valid or
 not and a "suggestion", which the BPost API thinks is the correct value.
 
 The "result" can be "valid", in which case the provided address exists and is formatted correct. If this is 
@@ -116,5 +121,4 @@ Example output
 
 ## Data Source
 
-The list of zip codes is available [here](https://www.bpost.be/site/nl/verzenden/adressering/zoek-een-postcode) on the 
-BPost. Requests send to this service are formatted correctly and passed through to the BPost address validation service. 
+This webservice handles zip codes of municipalities a little different than the official one. The list of zip codes is available [here](https://www.bpost.be/site/nl/verzenden/adressering/zoek-een-postcode) on the BPost. Requests send to this service are formatted correctly and passed through to the BPost address validation service. 
