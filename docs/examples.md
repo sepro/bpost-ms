@@ -81,6 +81,16 @@ Example output
 	"counts": {
 		"errors": 0,
 		"warnings": 0
+	},
+	"GeographicalLocation": {
+		"Latitude": {
+			"Value": "50.9009339173",
+			"CoordinateType": "DEGDEC"
+		},
+		"Longitude": {
+			"Value": "4.6706534454",
+			"CoordinateType": "DEGDEC"
+		}
 	}
 }
 ```
@@ -162,6 +172,16 @@ Example output
 	"counts": {
 		"errors": 0,
 		"warnings": 1
+	},
+	"GeographicalLocation": {
+		"Latitude": {
+			"Value": "50.9009339173",
+			"CoordinateType": "DEGDEC"
+		},
+		"Longitude": {
+			"Value": "4.6706534454",
+			"CoordinateType": "DEGDEC"
+		}
 	}
 }
 ```
@@ -245,6 +265,7 @@ Example output
 	"counts": {
 		"errors": 1,
 		"warnings": 3
-	}
+	},
+	"GeographicalLocation": {}
 }
 ```
