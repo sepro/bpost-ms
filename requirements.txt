@@ -15,5 +15,5 @@ pyrsistent==0.15.5
 requests==2.22.0
 six==1.15.0
 toml==0.10.1
-urllib3==1.25.9
+urllib3==1.26.5
 Werkzeug==1.0.1
